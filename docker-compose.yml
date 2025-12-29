@@ -10,10 +10,10 @@ services:
     depends_on:
       - x-crm-postgres
     expose:
-      - "5000:5000"  
+      - "8000:5000"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Develompent
-      - ASPNETCORE_URLS=http://+:5000;
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
       - "TZ=Europe/Moscow"
     command: ["dotnet", "/var/www/x-crm-manage-api.dll"]
     restart: unless-stopped
