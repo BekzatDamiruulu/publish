@@ -9,7 +9,7 @@ services:
       - ./:/var/www # code
     depends_on:
       - x-crm-postgres
-    expose:
+    ports:
       - "8000:5000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
