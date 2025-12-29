@@ -6,7 +6,8 @@ services:
     working_dir: /var/www
     volumes:
       - ./:/var/www # code
-
+    depends_on:
+      - x-crm-postgres
     expose:
       - 5000
     environment:
@@ -27,6 +28,12 @@ services:
       - ../database/postgres:/var/lib/postgresql/data
       - ../database/dumps/:/var/dumps/
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U root -d db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   x-crm-pgadmin:
     user: "${UID}:${GID}"
