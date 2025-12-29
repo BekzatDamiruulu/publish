@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  x-crm-api:
+    image: mcr.microsoft.com/dotnet/aspnet:8.0
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www # code
+
+    expose:
+      - 5000
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Develompent
+      - ASPNETCORE_URLS=http://+:5000;
+      - "TZ=Europe/Moscow"
+    command: ["dotnet", "/var/www/x-crm-manage-api.dll"]
+    restart: unless-stopped
+    
+  x-crm-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: rtx5070TINNN
+      POSTGRES_DB: db
+      TZ: Europe/Moscow
+    volumes:
+      - ../database/postgres:/var/lib/postgresql/data
+      - ../database/dumps/:/var/dumps/
+    restart: unless-stopped
+
+  x-crm-pgadmin:
+    user: "${UID}:${GID}"
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: adminrtx5070TINNN
+    volumes:
+      - ../database/pgadmin:/var/lib/pgadmin
+    restart: unless-stopped
+    ports:
+      - "5050:80"
+
+
+networks:
+  default:
+    name: docker-net
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1450
